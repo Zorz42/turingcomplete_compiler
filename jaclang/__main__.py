@@ -12,7 +12,7 @@ Options:
 - debug_preprocess: print preprocessed code
 - debug_tokens: print tokens
 - debug_tree: print abstract syntax tree
-"""
+- debug_assembly: print assembly code"""
         )
         return
 

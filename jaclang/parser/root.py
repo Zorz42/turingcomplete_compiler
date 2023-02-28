@@ -2,6 +2,7 @@ from abc import abstractmethod
 
 from jaclang.error.syntax_error import JaclangSyntaxError
 from jaclang.generator import Instruction, Instructions
+from jaclang.generator.generator import LabelParameter, ValueParameter
 from jaclang.lexer import Token, EndToken
 
 
@@ -63,13 +64,14 @@ class RootBranch:
         for branch in self.branches:
             instructions += branch.generateInstructions(context)
 
+        instructions += [
+            Instructions.Label("end"),
+            Instructions.Jump(LabelParameter("end"), None),
+        ]
+
         start_instructions = []
         for generator in self.init_generators:
             start_instructions += generator.generateInitInstructions(context)
-
-        start_instructions += [
-            Instructions.Terminate()
-        ]
 
         return start_instructions + instructions
 

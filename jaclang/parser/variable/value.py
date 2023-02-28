@@ -1,5 +1,6 @@
 from jaclang.error.syntax_error import JaclangSyntaxError
 from jaclang.generator import Instruction, Instructions, Registers
+from jaclang.generator.generator import LabelParameter
 from jaclang.lexer import Token, IdentifierToken
 from jaclang.parser.expression.value import ValueBranch
 from jaclang.parser.scope import ScopeContext, BranchInScopeFactory, BranchInScope, TokenExpectedException
@@ -23,8 +24,7 @@ class VariableBranch(ValueBranch):
             ]
         elif type(variable_obj) is GlobalVariableData:
             return [
-                Instructions.ImmediateLabel(Registers.ADDRESS, f"var {self.variable_name}"),
-                Instructions.MemRead(Registers.ADDRESS, 0, Registers.RETURN),
+                Instructions.MemRead(LabelParameter(f"var {self.variable_name}"), 0, Registers.RETURN),
             ]
         else:
             raise JaclangSyntaxError(-1, f"Label '{self.variable_name}' is not a variable")

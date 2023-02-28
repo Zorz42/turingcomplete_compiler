@@ -1,5 +1,6 @@
 from jaclang.error.syntax_error import JaclangSyntaxError
 from jaclang.generator import Instruction, Instructions, Registers
+from jaclang.generator.generator import LabelParameter, ValueParameter
 from jaclang.lexer import Token, IdentifierToken, Symbols
 from jaclang.parser.expression import ExpressionFactory
 from jaclang.parser.expression.value import ValueBranch
@@ -30,7 +31,7 @@ class FunctionCallBranch(ValueBranch):
         if func.args_num != len(self.args):
             raise JaclangSyntaxError(-1, f"Incorrect number of arguments on a function call (got {len(self.args)}, expected {func.args_num})")
 
-        jmp_label = f"jump {context.id_manager.requestId()}"
+        jmp_label = f"jump_{context.id_manager.requestId()}"
         instructions = []
         for arg in self.args:
             instructions += arg.generateInstructions(context)
@@ -39,16 +40,14 @@ class FunctionCallBranch(ValueBranch):
             ]
 
         instructions += [
-            Instructions.ImmediateLabel(Registers.ADDRESS, jmp_label),
-            Instructions.Push(Registers.ADDRESS),
-            Instructions.ImmediateLabel(Registers.ADDRESS, "func " + self.function_name),
-            Instructions.Jump(Registers.ADDRESS),
+            Instructions.Push(LabelParameter(jmp_label)),
+            Instructions.Jump(LabelParameter("func_" + self.function_name), None),
             Instructions.Label(jmp_label),
         ]
 
         instructions += [
-            Instructions.Pop(Registers.ADDRESS),
-        ] * len(self.args)
+            Instructions.Subtract(Registers.STACK_TOP, ValueParameter(len(self.args)), Registers.STACK_TOP),
+        ]
         return instructions
 
 

@@ -1,4 +1,5 @@
 from jaclang.generator import Instruction, Instructions, Registers
+from jaclang.generator.generator import LabelParameter, ValueParameter
 from jaclang.lexer import Token, Keywords
 from jaclang.parser.expression import ExpressionFactory
 from jaclang.parser.expression.value import ValueBranch
@@ -13,13 +14,11 @@ class IfStatementBranch(ModifierBranchInScope):
 
     def generateInstructions(self, context: ScopeContext) -> list[Instruction]:
         instructions = self.condition.generateInstructions(context)
-        if_begin = f"if begin {context.id_manager.requestId()}"
-        if_end = f"if end {context.id_manager.requestId()}"
+        if_begin = f"if_begin_{context.id_manager.requestId()}"
+        if_end = f"if_end_{context.id_manager.requestId()}"
         instructions += [
-            Instructions.ImmediateLabel(Registers.ADDRESS, if_begin),
-            Instructions.JumpIf(Registers.ADDRESS),
-            Instructions.ImmediateLabel(Registers.ADDRESS, if_end),
-            Instructions.Jump(Registers.ADDRESS),
+            Instructions.Jump(LabelParameter(if_begin), Registers.RETURN),
+            Instructions.Jump(LabelParameter(if_end), None),
             Instructions.Label(if_begin),
         ]
         instructions += self.branch.generateInstructions(context)

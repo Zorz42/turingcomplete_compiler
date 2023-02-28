@@ -1,4 +1,5 @@
 from jaclang.generator import Instruction, Instructions, Registers
+from jaclang.generator.generator import ValueParameter
 from jaclang.lexer import Token, ConstantToken
 from jaclang.parser.expression import ValueFactory
 from jaclang.parser.expression.value import ValueBranch
@@ -13,7 +14,7 @@ class IntegerBranch(ValueBranch):
         print('    ' * nested_level, self.value)
 
     def generateInstructions(self, _: ScopeContext) -> list[Instruction]:
-        return [Instructions.Immediate(Registers.RETURN, self.value)]
+        return [Instructions.Mov(ValueParameter(self.value), Registers.RETURN)]
 
 
 class IntegerFactory(BranchInScopeFactory):

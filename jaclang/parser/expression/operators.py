@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from jaclang.generator import Instructions, Registers, Instruction, CompareFlags
+from jaclang.generator import Instructions, Registers, Instruction
 from jaclang.lexer import Symbols
 
 
@@ -27,32 +27,32 @@ class MinusOperator(Operator):
 
 class EqualsOperator(Operator):
     def generateInstructions(self) -> list[Instruction]:
-        return [Instructions.Compare(Registers.EXPRESSION, Registers.RETURN, CompareFlags.EQUAL)]
+        return [Instructions.Equals(Registers.EXPRESSION, Registers.RETURN, Registers.RETURN)]
 
 
 class LesserOperator(Operator):
     def generateInstructions(self) -> list[Instruction]:
-        return [Instructions.Compare(Registers.EXPRESSION, Registers.RETURN, CompareFlags.LESSER)]
+        return [Instructions.LessThan(Registers.EXPRESSION, Registers.RETURN, Registers.RETURN)]
 
 
 class GreaterOperator(Operator):
     def generateInstructions(self) -> list[Instruction]:
-        return [Instructions.Compare(Registers.EXPRESSION, Registers.RETURN, CompareFlags.GREATER)]
+        return [Instructions.GreaterThan(Registers.EXPRESSION, Registers.RETURN, Registers.RETURN)]
 
 
 class LesserOrEqualOperator(Operator):
     def generateInstructions(self) -> list[Instruction]:
-        return [Instructions.Compare(Registers.EXPRESSION, Registers.RETURN, CompareFlags.LESSER_OR_EQUAL)]
+        return [Instructions.LessThanEquals(Registers.EXPRESSION, Registers.RETURN, Registers.RETURN)]
 
 
 class GreaterOrEqualOperator(Operator):
     def generateInstructions(self) -> list[Instruction]:
-        return [Instructions.Compare(Registers.EXPRESSION, Registers.RETURN, CompareFlags.GREATER_OR_EQUAL)]
+        return [Instructions.GreaterThanEquals(Registers.EXPRESSION, Registers.RETURN, Registers.RETURN)]
 
 
 class NotEqualOperator(Operator):
     def generateInstructions(self) -> list[Instruction]:
-        return [Instructions.Compare(Registers.EXPRESSION, Registers.RETURN, CompareFlags.NOT_EQUAL)]
+        return [Instructions.NotEquals(Registers.EXPRESSION, Registers.RETURN, Registers.RETURN)]
 
 
 class BitShiftLeftOperator(Operator):
@@ -80,16 +80,6 @@ class AndOperator(Operator):
         return [Instructions.And(Registers.EXPRESSION, Registers.RETURN, Registers.RETURN)]
 
 
-class XnorOperator(Operator):
-    def generateInstructions(self) -> list[Instruction]:
-        return [Instructions.Xnor(Registers.EXPRESSION, Registers.RETURN, Registers.RETURN)]
-
-
-class NandOperator(Operator):
-    def generateInstructions(self) -> list[Instruction]:
-        return [Instructions.Nand(Registers.EXPRESSION, Registers.RETURN, Registers.RETURN)]
-
-
 Operator.operators[Symbols.PLUS] = PlusOperator(Symbols.PLUS.name)
 Operator.operators[Symbols.MINUS] = MinusOperator(Symbols.MINUS.name)
 Operator.operators[Symbols.EQUALS] = EqualsOperator(Symbols.EQUALS.name)
@@ -103,5 +93,3 @@ Operator.operators[Symbols.BIT_SHIFT_RIGHT] = BitShiftRightOperator(Symbols.BIT_
 Operator.operators[Symbols.OR] = OrOperator(Symbols.OR.name)
 Operator.operators[Symbols.XOR] = XorOperator(Symbols.XOR.name)
 Operator.operators[Symbols.AND] = AndOperator(Symbols.AND.name)
-Operator.operators[Symbols.XNOR] = XnorOperator(Symbols.XNOR.name)
-Operator.operators[Symbols.NAND] = NandOperator(Symbols.NAND.name)

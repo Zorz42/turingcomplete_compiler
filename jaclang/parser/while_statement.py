@@ -1,4 +1,5 @@
 from jaclang.generator import Instruction, Instructions, Registers
+from jaclang.generator.generator import ValueParameter, LabelParameter
 from jaclang.lexer import Token, Keywords
 from jaclang.parser.expression import ExpressionFactory
 from jaclang.parser.expression.value import ValueBranch
@@ -12,24 +13,21 @@ class WhileStatementBranch(ModifierBranchInScope):
         self.condition = condition
 
     def generateInstructions(self, context: ScopeContext) -> list[Instruction]:
-        while_begin = f"while begin {context.id_manager.requestId()}"
-        while_begin2 = f"while begin2 {context.id_manager.requestId()}"
-        while_end = f"while end {context.id_manager.requestId()}"
+        while_begin = f"while_begin_{context.id_manager.requestId()}"
+        while_begin2 = f"while_begin2_{context.id_manager.requestId()}"
+        while_end = f"while_end_{context.id_manager.requestId()}"
         instructions = [
             Instructions.Label(while_begin),
         ]
         instructions += self.condition.generateInstructions(context)
         instructions += [
-            Instructions.ImmediateLabel(Registers.ADDRESS, while_begin2),
-            Instructions.JumpIf(Registers.ADDRESS),
-            Instructions.ImmediateLabel(Registers.ADDRESS, while_end),
-            Instructions.Jump(Registers.ADDRESS),
+            Instructions.Jump(LabelParameter(while_begin2), Registers.RETURN),
+            Instructions.Jump(LabelParameter(while_end), None),
             Instructions.Label(while_begin2),
         ]
         instructions += self.branch.generateInstructions(context)
         instructions += [
-            Instructions.ImmediateLabel(Registers.ADDRESS, while_begin),
-            Instructions.Jump(Registers.ADDRESS),
+            Instructions.Jump(LabelParameter(while_begin), None),
             Instructions.Label(while_end),
         ]
         return instructions

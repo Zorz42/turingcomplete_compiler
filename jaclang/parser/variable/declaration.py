@@ -61,7 +61,6 @@ class GlobalVariableDeclarationBranch(BranchInRoot):
 
         return [
             Instructions.Label(f"var {self.variable_name}"),
-            Instructions.Value(0),
         ]
 
     def printInfo(self, nested_level: int):

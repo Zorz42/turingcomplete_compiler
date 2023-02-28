@@ -2,6 +2,7 @@ from copy import copy
 
 from jaclang.error.syntax_error import JaclangSyntaxError
 from jaclang.generator import Instruction, Instructions, Registers
+from jaclang.generator.generator import ValueParameter
 from jaclang.lexer import Token, Keywords, IdentifierToken, Symbols
 from jaclang.parser.root import SymbolData, BranchInRoot, BranchInRootFactory, RootContext
 from jaclang.parser.scope import ScopeBranch, ScopeFactory, ScopeContext, StackManager
@@ -39,13 +40,12 @@ class FunctionDeclarationBranch(BranchInRoot):
         body_instructions = self.body.generateInstructions(new_context)
 
         begin_instructions: list[Instruction] = [
-            Instructions.Label(f"func {self.name}"),
-            Instructions.Mov(Registers.STACK_BASE, Registers.ADDRESS),
-            Instructions.GetStackPointer(Registers.STACK_BASE),
-            Instructions.Immediate(Registers.RETURN, new_context.stack_manager.getSize()),
-            Instructions.Add(Registers.STACK_BASE, Registers.RETURN, Registers.RETURN),
-            Instructions.SetStackPointer(Registers.RETURN),
-            Instructions.Push(Registers.ADDRESS),
+            Instructions.Label(f"func_{self.name}"),
+            Instructions.Mov(Registers.STACK_BASE, Registers.EXPRESSION),
+            Instructions.Mov(Registers.STACK_TOP, Registers.STACK_BASE),
+            Instructions.Add(Registers.STACK_BASE, ValueParameter(new_context.stack_manager.getSize()), Registers.RETURN),
+            Instructions.Mov(Registers.RETURN, Registers.STACK_TOP),
+            Instructions.Push(Registers.EXPRESSION),
         ]
 
         return begin_instructions + body_instructions
