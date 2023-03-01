@@ -32,7 +32,9 @@ class FunctionCallBranch(ValueBranch):
             raise JaclangSyntaxError(-1, f"Incorrect number of arguments on a function call (got {len(self.args)}, expected {func.args_num})")
 
         jmp_label = f"jump_{context.id_manager.requestId()}"
-        instructions = []
+        instructions = [
+            Instructions.Push(LabelParameter(jmp_label))
+        ]
         for arg in self.args:
             instructions += arg.generateInstructions(context)
             instructions += [
@@ -40,14 +42,10 @@ class FunctionCallBranch(ValueBranch):
             ]
 
         instructions += [
-            Instructions.Push(LabelParameter(jmp_label)),
             Instructions.Jump(LabelParameter("func_" + self.function_name), None),
             Instructions.Label(jmp_label),
         ]
 
-        instructions += [
-            Instructions.Subtract(Registers.STACK_TOP, ValueParameter(len(self.args)), Registers.STACK_TOP),
-        ]
         return instructions
 
 
@@ -74,4 +72,4 @@ class FunctionCallFactory(BranchInScopeFactory):
 class MainCallGenerator(InitGenerator):
     def generateInitInstructions(self, context: RootContext) -> list[Instruction]:
         return FunctionCallBranch("main", []).generateInstructions(
-            ScopeContext(context.symbols, context.id_manager, StackManager()))
+            ScopeContext(context.symbols, context.id_manager, StackManager(), "main"))

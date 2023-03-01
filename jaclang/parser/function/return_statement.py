@@ -1,7 +1,7 @@
 from typing import Optional
 
-from jaclang.generator import Instruction, Instructions, Registers
-from jaclang.generator.generator import ValueParameter
+from jaclang.generator import Instruction, Instructions
+from jaclang.generator.generator import LabelParameter
 from jaclang.lexer import Token, Keywords
 from jaclang.parser.expression import ExpressionFactory
 from jaclang.parser.expression.value import ValueBranch
@@ -17,11 +17,7 @@ class ReturnStatementBranch(BranchInScope):
         if self.value is not None:
             instructions += self.value.generateInstructions(context)
         instructions += [
-            Instructions.Pop(Registers.EXPRESSION),
-            Instructions.Mov(Registers.STACK_BASE, Registers.STACK_TOP),
-            Instructions.Mov(Registers.EXPRESSION, Registers.STACK_BASE),
-            Instructions.Pop(Registers.EXPRESSION),
-            Instructions.Jump(Registers.EXPRESSION, None),
+            Instructions.Jump(LabelParameter(f"func_{context.curr_function}_return"), None),
         ]
         return instructions
 

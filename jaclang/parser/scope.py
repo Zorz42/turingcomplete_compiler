@@ -20,9 +20,10 @@ class StackManager:
 
 
 class ScopeContext(RootContext):
-    def __init__(self, symbols: dict[str, SymbolData], id_manager: IdManager, stack_manager: StackManager):
+    def __init__(self, symbols: dict[str, SymbolData], id_manager: IdManager, stack_manager: StackManager, curr_function: str):
         super().__init__(symbols, id_manager)
         self.stack_manager = stack_manager
+        self.curr_function = curr_function
 
 
 class BranchInScope:

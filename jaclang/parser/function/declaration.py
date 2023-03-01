@@ -30,7 +30,7 @@ class FunctionDeclarationBranch(BranchInRoot):
     def generateInstructions(self, context: RootContext) -> list[Instruction]:
         context.symbols[self.name] = FunctionData(len(self.arg_names))
 
-        new_context = ScopeContext(copy(context.symbols), context.id_manager, StackManager())
+        new_context = ScopeContext(copy(context.symbols), context.id_manager, StackManager(), self.name)
 
         curr_pos_on_stack = -4
         for arg in reversed(self.arg_names):
@@ -41,14 +41,21 @@ class FunctionDeclarationBranch(BranchInRoot):
 
         begin_instructions: list[Instruction] = [
             Instructions.Label(f"func_{self.name}"),
-            Instructions.Mov(Registers.STACK_BASE, Registers.EXPRESSION),
+            Instructions.Push(Registers.STACK_BASE),
             Instructions.Mov(Registers.STACK_TOP, Registers.STACK_BASE),
-            Instructions.Add(Registers.STACK_BASE, ValueParameter(new_context.stack_manager.getSize()), Registers.RETURN),
-            Instructions.Mov(Registers.RETURN, Registers.STACK_TOP),
-            Instructions.Push(Registers.EXPRESSION),
+            Instructions.Add(Registers.STACK_BASE, ValueParameter(new_context.stack_manager.getSize()), Registers.STACK_TOP),
         ]
 
-        return begin_instructions + body_instructions
+        return_instructions: list[Instruction] = [
+            Instructions.Label(f"func_{self.name}_return"),
+            Instructions.Mov(Registers.STACK_BASE, Registers.STACK_TOP),
+            Instructions.Pop(Registers.STACK_BASE),
+            Instructions.Pop(Registers.REG1),
+            Instructions.Subtract(Registers.STACK_TOP, ValueParameter(len(self.arg_names)), Registers.STACK_TOP),
+            Instructions.Jump(Registers.REG1, None),
+        ]
+
+        return begin_instructions + body_instructions + return_instructions
 
 
 class FunctionDeclarationFactory(BranchInRootFactory):
@@ -77,6 +84,5 @@ class FunctionDeclarationFactory(BranchInRootFactory):
         pos += 1
 
         pos, body = ScopeFactory().parseExpect(pos, tokens)
-        body.branches.append(ReturnStatementBranch(None))
 
         return pos, FunctionDeclarationBranch(func_name, arg_names, body)

@@ -64,14 +64,14 @@ class RootBranch:
         for branch in self.branches:
             instructions += branch.generateInstructions(context)
 
-        instructions += [
-            Instructions.Label("end"),
-            Instructions.Jump(LabelParameter("end"), None),
-        ]
-
         start_instructions = []
         for generator in self.init_generators:
             start_instructions += generator.generateInitInstructions(context)
+
+        start_instructions += [
+            Instructions.Label("end"),
+            Instructions.Jump(LabelParameter("end"), None),
+        ]
 
         return start_instructions + instructions
 
