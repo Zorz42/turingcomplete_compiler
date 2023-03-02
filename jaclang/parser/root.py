@@ -69,8 +69,7 @@ class RootBranch:
             start_instructions += generator.generateInitInstructions(context)
 
         start_instructions += [
-            Instructions.Label("end"),
-            Instructions.Jump(LabelParameter("end"), None),
+            Instructions.Halt()
         ]
 
         return start_instructions + instructions

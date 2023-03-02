@@ -295,3 +295,13 @@ class Instructions:
 
         def intoRawAssembly(self) -> str:
             return f"label {self.label_name}\n"
+
+    class Halt(Instruction):
+        def __init__(self):
+            pass
+
+        def printInfo(self):
+            print(f"    HALT")
+
+        def intoRawAssembly(self) -> str:
+            return generate_raw_assembly("HLT", None, None, None)
