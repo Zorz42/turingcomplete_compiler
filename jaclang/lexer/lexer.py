@@ -108,14 +108,15 @@ class Symbols:
     OR = SymbolToken("OR", "|")
     XOR = SymbolToken("XOR", "^")
     AND = SymbolToken("AND", "&")
-    XNOR = SymbolToken("XNOR", "!^")
-    NAND = SymbolToken("NAND", "!&")
     INCREMENT = SymbolToken("INCREMENT", "++")
     DECREMENT = SymbolToken("DECREMENT", "--")
     INCREMENT_BY = SymbolToken("INCREMENT_BY", "+=")
     DECREMENT_BY = SymbolToken("DECREMENT_BY", "-=")
     PLUS = SymbolToken("PLUS", "+")
     MINUS = SymbolToken("MINUS", "-")
+    MULTIPLY = SymbolToken("MULTIPLY", "*")
+    DIVIDE = SymbolToken("DIVIDE", "/")
+    MODULO = SymbolToken("MODULO", "%")
 
     # Comparisons
     EQUALS = SymbolToken("EQUALS", "==")

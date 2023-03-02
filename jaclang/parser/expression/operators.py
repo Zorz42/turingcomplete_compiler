@@ -80,6 +80,21 @@ class AndOperator(Operator):
         return [Instructions.And(Registers.EXPRESSION, Registers.RETURN, Registers.RETURN)]
 
 
+class MultiplyOperator(Operator):
+    def generateInstructions(self) -> list[Instruction]:
+        return [Instructions.Multiply(Registers.EXPRESSION, Registers.RETURN, Registers.RETURN)]
+
+
+class DivideOperator(Operator):
+    def generateInstructions(self) -> list[Instruction]:
+        return [Instructions.Divide(Registers.EXPRESSION, Registers.RETURN, Registers.RETURN)]
+
+
+class ModuloOperator(Operator):
+    def generateInstructions(self) -> list[Instruction]:
+        return [Instructions.Modulo(Registers.EXPRESSION, Registers.RETURN, Registers.RETURN)]
+
+
 Operator.operators[Symbols.PLUS] = PlusOperator(Symbols.PLUS.name)
 Operator.operators[Symbols.MINUS] = MinusOperator(Symbols.MINUS.name)
 Operator.operators[Symbols.EQUALS] = EqualsOperator(Symbols.EQUALS.name)
@@ -93,3 +108,6 @@ Operator.operators[Symbols.BIT_SHIFT_RIGHT] = BitShiftRightOperator(Symbols.BIT_
 Operator.operators[Symbols.OR] = OrOperator(Symbols.OR.name)
 Operator.operators[Symbols.XOR] = XorOperator(Symbols.XOR.name)
 Operator.operators[Symbols.AND] = AndOperator(Symbols.AND.name)
+Operator.operators[Symbols.MULTIPLY] = MultiplyOperator(Symbols.MULTIPLY.name)
+Operator.operators[Symbols.DIVIDE] = DivideOperator(Symbols.DIVIDE.name)
+Operator.operators[Symbols.MODULO] = ModuloOperator(Symbols.MODULO.name)
