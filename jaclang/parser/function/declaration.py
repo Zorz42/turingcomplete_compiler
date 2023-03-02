@@ -6,7 +6,6 @@ from jaclang.generator.generator import ValueParameter
 from jaclang.lexer import Token, Keywords, IdentifierToken, Symbols
 from jaclang.parser.root import SymbolData, BranchInRoot, BranchInRootFactory, RootContext
 from jaclang.parser.scope import ScopeBranch, ScopeFactory, ScopeContext, StackManager
-from jaclang.parser.function.return_statement import ReturnStatementBranch
 from jaclang.parser.variable.assignment import VariableData
 
 
@@ -32,10 +31,10 @@ class FunctionDeclarationBranch(BranchInRoot):
 
         new_context = ScopeContext(copy(context.symbols), context.id_manager, StackManager(), self.name)
 
-        curr_pos_on_stack = -4
+        curr_pos_on_stack = -2
         for arg in reversed(self.arg_names):
             new_context.symbols[arg] = VariableData(curr_pos_on_stack)
-            curr_pos_on_stack -= 2
+            curr_pos_on_stack -= 1
 
         body_instructions = self.body.generateInstructions(new_context)
 
@@ -50,9 +49,9 @@ class FunctionDeclarationBranch(BranchInRoot):
             Instructions.Label(f"func_{self.name}_return"),
             Instructions.Mov(Registers.STACK_BASE, Registers.STACK_TOP),
             Instructions.Pop(Registers.STACK_BASE),
-            Instructions.Pop(Registers.REG1),
             Instructions.Subtract(Registers.STACK_TOP, ValueParameter(len(self.arg_names)), Registers.STACK_TOP),
-            Instructions.Jump(Registers.REG1, None),
+            Instructions.Pop(Registers.EXPRESSION),
+            Instructions.Jump(Registers.EXPRESSION, None),
         ]
 
         return begin_instructions + body_instructions + return_instructions

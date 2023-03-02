@@ -1,6 +1,8 @@
 from copy import copy
 from abc import abstractmethod
 
+from jaclang.preprocessor.preprocessor import PREPROCESSOR_WHITESPACE
+
 
 class Token:
     def __init__(self):
@@ -173,7 +175,7 @@ def tokenize(code: str, debug_output: bool = False) -> list[Token]:
                 curr_symbol = copy(symbol)
                 break
 
-        if code[i] == ' ' or curr_symbol is not None:
+        if code[i] == PREPROCESSOR_WHITESPACE or curr_symbol is not None or (len(code) > i + 2 and code[i] == "'" and code[i + 2] == "'"):
             if curr_token != "":
                 if is_number(curr_token):
                     new_token = ConstantToken(parse_number(curr_token))
@@ -185,8 +187,14 @@ def tokenize(code: str, debug_output: bool = False) -> list[Token]:
                 curr_token = ""
                 tokens.append(new_token)
 
-            if code[i] == ' ':
+            if code[i] == PREPROCESSOR_WHITESPACE:
                 i += 1
+
+            if len(code) > i + 2 and code[i] == "'" and code[i + 2] == "'":
+                new_token = ConstantToken(ord(code[i + 1]))
+                new_token.pos = i
+                tokens.append(new_token)
+                i += 3
 
             if curr_symbol is not None:
                 curr_symbol.pos = i

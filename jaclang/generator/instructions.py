@@ -2,6 +2,14 @@ from typing import Optional
 
 from jaclang.generator.generator import RegisterParameter, Instruction, Parameter, generate_raw_assembly, ValueParameter
 
+def format_memory_addr(reg: str, offset: int):
+    if offset == 0:
+        return f"[{reg}]"
+    elif offset > 0:
+        return f"[{reg} + {offset}]"
+    else:
+        return f"[{reg} - {-offset}]"
+
 
 class Instructions:
     class Noop(Instruction):
@@ -221,7 +229,7 @@ class Instructions:
             self.value = value
 
         def printInfo(self):
-            print(f"    [{self.addr.getInfo()} + {self.addr_offset}] = {self.value.getInfo()}")
+            print(f"    {format_memory_addr(self.addr.getInfo(), self.addr_offset)} = {self.value.getInfo()}")
 
         def intoRawAssembly(self) -> str:
             return generate_raw_assembly("SAVE", self.value, self.addr, ValueParameter(self.addr_offset))
@@ -233,7 +241,7 @@ class Instructions:
             self.reg_save = reg_save
 
         def printInfo(self):
-            print(f"    {self.reg_save.getInfo()} = [{self.addr.getInfo()} + {self.addr_offset}]")
+            print(f"    {self.reg_save.getInfo()} = {format_memory_addr(self.addr.getInfo(), self.addr_offset)}")
 
         def intoRawAssembly(self) -> str:
             return generate_raw_assembly("LOAD", ValueParameter(self.addr_offset), self.addr, self.reg_save)
