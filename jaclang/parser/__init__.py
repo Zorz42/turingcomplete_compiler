@@ -10,6 +10,7 @@ from jaclang.parser import function
 from jaclang.parser import scope
 from jaclang.parser import variable
 from jaclang.parser import expression
+from jaclang.parser import pointers
 
 
 while_statement.load()
@@ -18,6 +19,7 @@ integer.load()
 function.load()
 scope.load()
 variable.load()
+pointers.load()
 expression.load()
 
 

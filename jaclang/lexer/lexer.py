@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from copy import copy
 from abc import abstractmethod
 
@@ -143,6 +141,23 @@ class Keywords:
     WHILE = KeywordToken("WHILE", "while")
     VAR = KeywordToken("VAR", "var")
     RETURN = KeywordToken("RETURN", "return")
+    WRITE = KeywordToken("WRITE", "write")
+
+
+def parse_number(string: str) -> int:
+    if string.startswith("0b"):
+        return int(string[2:], 2)
+    elif string.startswith("0x"):
+        return int(string[2:], 16)
+    else:
+        return int(string)
+
+def is_number(string: str) -> bool:
+    try:
+        parse_number(string)
+        return True
+    except ValueError:
+        return False
 
 
 def tokenize(code: str, debug_output: bool = False) -> list[Token]:
@@ -159,8 +174,8 @@ def tokenize(code: str, debug_output: bool = False) -> list[Token]:
 
         if code[i] == ' ' or curr_symbol is not None:
             if curr_token != "":
-                if curr_token.isdigit():
-                    new_token = ConstantToken(int(curr_token))
+                if is_number(curr_token):
+                    new_token = ConstantToken(parse_number(curr_token))
                 elif curr_token in KeywordToken.keywords.keys():
                     new_token = KeywordToken.keywords[curr_token]
                 else:

@@ -2,7 +2,6 @@ from abc import abstractmethod
 
 from jaclang.error.syntax_error import JaclangSyntaxError
 from jaclang.generator import Instruction, Instructions
-from jaclang.generator.generator import LabelParameter, ValueParameter
 from jaclang.lexer import Token, EndToken
 
 
