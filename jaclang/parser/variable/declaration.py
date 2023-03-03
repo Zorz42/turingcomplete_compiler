@@ -57,11 +57,9 @@ class GlobalVariableDeclarationBranch(BranchInRoot):
         self.variable_name = variable_name
 
     def generateInstructions(self, context: RootContext) -> list[Instruction]:
-        context.symbols[self.variable_name] = GlobalVariableData()
+        context.symbols[self.variable_name] = GlobalVariableData(context.allocate_global_variable())
 
-        return [
-            Instructions.Label(f"var {self.variable_name}"),
-        ]
+        return []
 
     def printInfo(self, nested_level: int):
         print('    ' * nested_level, "GlobalVariableDeclaration:")

@@ -2,7 +2,7 @@ from typing import Optional
 
 from jaclang.error.syntax_error import JaclangSyntaxError
 from jaclang.generator import Instruction, Registers, Instructions
-from jaclang.generator.generator import LabelParameter
+from jaclang.generator.generator import ValueParameter
 from jaclang.lexer import IdentifierToken, Token, Symbols
 from jaclang.parser.expression.expression import ExpressionFactory
 from jaclang.parser.expression.value import ValueBranch
@@ -16,8 +16,8 @@ class VariableData(SymbolData):
 
 
 class GlobalVariableData(SymbolData):
-    def __init__(self):
-        pass
+    def __init__(self, pos_in_mem: int):
+        self.pos_in_mem = pos_in_mem
 
 
 class VariableAssignmentBranch(BranchInScope):
@@ -40,7 +40,7 @@ class VariableAssignmentBranch(BranchInScope):
         elif type(variable_obj) is GlobalVariableData:
             if self.value is not None:
                 instructions += [
-                    Instructions.MemoryWrite(LabelParameter(f"var {self.variable_name}"), 0, Registers.RETURN),
+                    Instructions.MemoryWrite(ValueParameter(variable_obj.pos_in_mem), 0, Registers.RETURN),
                 ]
         else:
             raise JaclangSyntaxError(-1, f"Label '{self.variable_name}' is not a variable")

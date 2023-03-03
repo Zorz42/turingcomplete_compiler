@@ -1,7 +1,8 @@
 from abc import abstractmethod
 
 from jaclang.error.syntax_error import JaclangSyntaxError
-from jaclang.generator import Instruction, Instructions
+from jaclang.generator import Instruction, Instructions, Registers
+from jaclang.generator.generator import ValueParameter
 from jaclang.lexer import Token, EndToken
 
 
@@ -23,6 +24,11 @@ class RootContext:
     def __init__(self, symbols: dict[str, SymbolData], id_manager: IdManager):
         self.symbols = symbols
         self.id_manager = id_manager
+        self.global_variable_space_size = 0
+
+    def allocate_global_variable(self):
+        self.global_variable_space_size += 1
+        return self.global_variable_space_size - 1
 
 
 class BranchInRoot:
@@ -63,7 +69,10 @@ class RootBranch:
         for branch in self.branches:
             instructions += branch.generateInstructions(context)
 
-        start_instructions = []
+        start_instructions = [
+            Instructions.Mov(ValueParameter(context.global_variable_space_size), Registers.STACK_TOP)
+        ]
+
         for generator in self.init_generators:
             start_instructions += generator.generateInitInstructions(context)
 

@@ -25,7 +25,7 @@ class Registers:
     REG3 = RegisterParameter(3, "R3", "rd")
     REG4 = RegisterParameter(4, "R4", "re")
     EXPRESSION = RegisterParameter(5, "REXPR", "rf")
-    STACK_BASE = RegisterParameter(6, "RSB", "rg")
+    STACK_BASE = RegisterParameter(6, "RBP", "rg")
     STACK_TOP = RegisterParameter(7, "RSP", "rsp")
 
 
