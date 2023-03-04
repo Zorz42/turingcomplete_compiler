@@ -22,7 +22,7 @@ class PlusOperator(Operator):
 
 class MinusOperator(Operator):
     def generateInstructions(self) -> list[Instruction]:
-        return [Instructions.Subtract(Registers.RETURN, Registers.EXPRESSION, Registers.RETURN)]
+        return [Instructions.Subtract(Registers.EXPRESSION, Registers.RETURN, Registers.RETURN)]
 
 
 class EqualsOperator(Operator):

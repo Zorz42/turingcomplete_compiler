@@ -1,4 +1,5 @@
-from jaclang.parser import ValueFactory, RootFactory
+from jaclang.parser.expression import ValueFactory
+from jaclang.parser.root import RootFactory
 from jaclang.parser.function.call import FunctionCallFactory, MainCallGenerator
 from jaclang.parser.function.declaration import FunctionDeclarationFactory
 from jaclang.parser.function.return_statement import ReturnStatementFactory

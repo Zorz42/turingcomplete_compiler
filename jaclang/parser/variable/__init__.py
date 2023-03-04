@@ -1,4 +1,5 @@
-from jaclang.parser import ValueFactory, RootFactory
+from jaclang.parser.expression import ValueFactory
+from jaclang.parser.root import RootFactory
 from jaclang.parser.scope import ScopeFactory
 from jaclang.parser.variable.assignment import VariableAssignmentFactory
 from jaclang.parser.variable.declaration import VariableDeclarationFactory, GlobalVariableDeclarationFactory

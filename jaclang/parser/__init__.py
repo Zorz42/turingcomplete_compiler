@@ -8,6 +8,7 @@ from jaclang.parser import integer
 from jaclang.parser import pointers
 from jaclang.parser import scope
 from jaclang.parser import variable
+from jaclang.parser import receive_key
 from jaclang.parser.expression import ValueFactory
 from jaclang.parser.root import RootFactory
 
@@ -18,6 +19,7 @@ function.load()
 scope.load()
 variable.load()
 pointers.load()
+receive_key.load()
 expression.load()
 
 
