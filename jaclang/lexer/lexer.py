@@ -1,5 +1,5 @@
-from copy import copy
 from abc import abstractmethod
+from copy import copy
 
 from jaclang.preprocessor.preprocessor import PREPROCESSOR_WHITESPACE
 
@@ -145,6 +145,7 @@ class Keywords:
     VAR = KeywordToken("VAR", "var")
     RETURN = KeywordToken("RETURN", "return")
     WRITE = KeywordToken("WRITE", "write")
+    RECV_KEY = KeywordToken("RECV_KEY", "receive_key")
 
 
 def parse_number(string: str) -> int:
@@ -154,6 +155,7 @@ def parse_number(string: str) -> int:
         return int(string[2:], 16)
     else:
         return int(string)
+
 
 def is_number(string: str) -> bool:
     try:
@@ -175,7 +177,8 @@ def tokenize(code: str, debug_output: bool = False) -> list[Token]:
                 curr_symbol = copy(symbol)
                 break
 
-        if code[i] == PREPROCESSOR_WHITESPACE or curr_symbol is not None or (len(code) > i + 2 and code[i] == "'" and code[i + 2] == "'"):
+        if code[i] == PREPROCESSOR_WHITESPACE or curr_symbol is not None or (
+                len(code) > i + 2 and code[i] == "'" and code[i + 2] == "'"):
             if curr_token != "":
                 if is_number(curr_token):
                     new_token = ConstantToken(parse_number(curr_token))

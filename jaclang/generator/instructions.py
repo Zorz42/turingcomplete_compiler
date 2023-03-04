@@ -2,6 +2,7 @@ from typing import Optional
 
 from jaclang.generator.generator import RegisterParameter, Instruction, Parameter, generate_raw_assembly, ValueParameter
 
+
 def format_memory_addr(reg: str, offset: int):
     if offset == 0:
         return f"[{reg}]"
@@ -313,3 +314,13 @@ class Instructions:
 
         def intoRawAssembly(self) -> str:
             return generate_raw_assembly("HLT", None, None, None)
+
+    class ReceiveKey(Instruction):
+        def __init__(self, reg: RegisterParameter):
+            self.reg = reg
+
+        def printInfo(self):
+            print(f"    RECV_KEY {self.reg.getInfo()}")
+
+        def intoRawAssembly(self) -> str:
+            return generate_raw_assembly("RECV", None, None, self.reg)

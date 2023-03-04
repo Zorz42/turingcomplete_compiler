@@ -2,6 +2,7 @@ from jaclang.error.syntax_error import JaclangSyntaxError
 
 PREPROCESSOR_WHITESPACE = " "
 
+
 def removeSingleLineComments(code: str) -> str:
     new_code = ""
     is_in_comment = False
@@ -45,5 +46,6 @@ def preprocess(file_contents: str, debug_output: bool = False) -> str:
         print(file_contents)
         print("---------------------------------")
 
-    file_contents = file_contents.replace("\n", PREPROCESSOR_WHITESPACE).replace("\t", PREPROCESSOR_WHITESPACE).replace(" ", PREPROCESSOR_WHITESPACE).replace("\r", PREPROCESSOR_WHITESPACE)
+    file_contents = file_contents.replace("\n", PREPROCESSOR_WHITESPACE).replace("\t", PREPROCESSOR_WHITESPACE).replace(
+        " ", PREPROCESSOR_WHITESPACE).replace("\r", PREPROCESSOR_WHITESPACE)
     return file_contents

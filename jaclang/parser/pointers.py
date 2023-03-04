@@ -44,5 +44,6 @@ class WriteFactory(BranchInScopeFactory):
 
         return pos, WriteBranch(address, value)
 
+
 def load():
     ScopeFactory.factories.append(WriteFactory())

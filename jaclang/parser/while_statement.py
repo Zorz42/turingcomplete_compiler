@@ -1,5 +1,5 @@
 from jaclang.generator import Instruction, Instructions, Registers
-from jaclang.generator.generator import ValueParameter, LabelParameter
+from jaclang.generator.generator import LabelParameter
 from jaclang.lexer import Token, Keywords
 from jaclang.parser.expression import ExpressionFactory
 from jaclang.parser.expression.value import ValueBranch

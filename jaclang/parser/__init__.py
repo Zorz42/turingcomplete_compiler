@@ -1,17 +1,15 @@
 from jaclang.generator import Instruction
 from jaclang.lexer import Token
-from jaclang.parser.expression import ValueFactory
-from jaclang.parser.root import RootFactory
-
+from jaclang.parser import expression
+from jaclang.parser import function
 # modules
 from jaclang.parser import if_statement, while_statement
 from jaclang.parser import integer
-from jaclang.parser import function
+from jaclang.parser import pointers
 from jaclang.parser import scope
 from jaclang.parser import variable
-from jaclang.parser import expression
-from jaclang.parser import pointers
-
+from jaclang.parser.expression import ValueFactory
+from jaclang.parser.root import RootFactory
 
 while_statement.load()
 if_statement.load()
